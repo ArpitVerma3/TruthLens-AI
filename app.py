@@ -4,6 +4,9 @@ from PIL import Image
 import tensorflow as tf
 from tensorflow.keras.applications.resnet50 import preprocess_input
 
+MODEL_IMAGE_SIZE = (200, 200)
+REAL_IMAGE_THRESHOLD = 0.61
+
 # ---------------- PAGE CONFIG ----------------
 
 st.set_page_config(
@@ -113,7 +116,7 @@ if image is not None:
         width=500
     )
 
-    img = image.resize((200, 200))
+    img = image.resize(MODEL_IMAGE_SIZE)
     img_array = preprocess_input(np.array(img, dtype="float32"))
     img_array = np.expand_dims(img_array, axis=0)
 
@@ -124,7 +127,7 @@ if image is not None:
 
     st.markdown("---")
 
-    if confidence > 0.5:
+    if confidence >= REAL_IMAGE_THRESHOLD:
 
         st.markdown(f"""
         <div class='result-box result-real'>
